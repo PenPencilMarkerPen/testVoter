@@ -1,11 +1,10 @@
 services:
-  ###> symfony/mailer ###
-  mailer:
-    image: axllent/mailpit
-    ports:
-      - "1025"
-      - "8025"
+  postgres:
+    image: postgres:16
+    container_name: postgres-secure
     environment:
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
-###< symfony/mailer ###
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=test
+    ports:
+      - "7654:5432"
