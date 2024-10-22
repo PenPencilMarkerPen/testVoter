@@ -32,11 +32,11 @@ class Brand
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public int $id;
 
     #[ORM\Column(length: 65)]
     #[Groups(['brand:read', 'brand:write'])]
-    public ?string $name = null;
+    public string $name;
 
     #[ORM\ManyToOne(inversedBy: 'brands')]
     #[Groups(['brand:read', 'brand:write'])]

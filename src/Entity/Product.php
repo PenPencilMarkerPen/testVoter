@@ -41,11 +41,11 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public int $id;
 
     #[ORM\Column(length: 65)]
     #[Groups(['product:read', 'product:write'])]
-    public ?string $name = null;
+    public string $name;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['product:read', 'product:write'])]

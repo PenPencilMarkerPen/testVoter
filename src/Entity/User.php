@@ -47,10 +47,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'user:write'])]
     private string $password;
 
-    #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'users')]
-    #[Groups(['user:read'])]
-    private Collection $books;
-
     #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'users')]
     private Collection $tokens;
 
@@ -61,7 +57,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->books = new ArrayCollection();
         $this->tokens = new ArrayCollection();
         $this->brands = new ArrayCollection();
     }
@@ -104,31 +99,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getBooks(): Collection
-    {
-        return $this->books;
-    }
-
-    public function addBook(Book $book): static
-    {
-        if (!$this->books->contains($book)) {   
-            $this->books->add($book);
-            $book->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBook(Book $book): static
-    {
-        if ($this->books->removeElement($book)) {
-            if ($book->getUsers() === $this) {
-                $book->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getTokens(): Collection
     {

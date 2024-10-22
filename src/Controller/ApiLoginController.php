@@ -17,9 +17,7 @@ class ApiLoginController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager
     )
-    {
-        
-    }
+    {}
 
     #[Route('/api/token/login', name: 'api_token_login', methods: ['POST'])]
     public function index(#[CurrentUser] ?User $user): JsonResponse
@@ -32,7 +30,7 @@ class ApiLoginController extends AbstractController
         $tokenHex = bin2hex(random_bytes(60));
 
         $token = new Token();
-        $token->setToken($tokenHex);
+        $token->token=$tokenHex;
         $user->addToken($token);
 
         $this->entityManager->persist($user);

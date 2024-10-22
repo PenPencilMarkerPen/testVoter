@@ -31,7 +31,7 @@ class File
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public int $id;
 
     #[Groups(['file:read'])]
     #[ORM\Column()]
@@ -52,11 +52,6 @@ class File
     #[ORM\ManyToOne(inversedBy: 'files')]
     #[Groups(['file:read', 'file:write'])]
     private ?Product $product = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getProduct(): ?Product
     {
