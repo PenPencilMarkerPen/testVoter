@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -64,6 +66,15 @@ class Product
     #[Groups(['product:read', 'product:write'])]
     private ?Brand $brand = null;
 
+    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'product')]
+    #[Groups(['product:read'])]
+    private Collection $files;
+
+    public function __construct()
+    {
+        $this->files = new ArrayCollection();
+    }
+
 
     public function getBrand(): ?Brand
     {
@@ -73,6 +84,32 @@ class Product
     public function setBrand(?Brand $brand): static
     {
         $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): static
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+            $file->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): static
+    {
+        if ($this->files->removeElement($file)) {
+            if ($file->getProduct() === $this) {
+                $file->setProduct(null);
+            }
+        }
 
         return $this;
     }
