@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -18,9 +19,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['brand:read']],
     denormalizationContext: ['groups' => ['brand:write']],
 )]
-#[GetCollection]
-// #[Get(security: "is_granted('BRAND_READ', object)")]
-#[Get()]
+// #[GetCollection]
+#[Get(security: "is_granted('BRAND_READ', object)")]
+// #[Get()]
 // #[Put(security: "is_granted('BRAND_EDIT', object)")]
 #[Delete(security: "is_granted('BRAND_DELETE', object)")]
 #[Post(securityPostDenormalize: "is_granted('BRAND_CREATE', object)")]

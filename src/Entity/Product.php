@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Link;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['product:read']],
@@ -23,6 +24,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)")]
 #[Put(securityPostDenormalize: "is_granted('PRODUCT_EDIT', object)")]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ApiResource(
+    uriTemplate: '/brand/{brandId}/products',
+    uriVariables: [
+        'brandId' => new Link(fromClass: Brand::class, fromProperty: 'products'),
+    ],
+    operations: [
+        new GetCollection()
+    ],
+)]
 class Product
 {
     #[ORM\Id]
