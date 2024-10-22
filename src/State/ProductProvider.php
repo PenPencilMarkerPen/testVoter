@@ -10,6 +10,8 @@ use App\Repository\ProductRepository;
 use Symfony\Component\Mime\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Product;
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\Message\ConfirmEmail;
 
 
 class ProductProvider implements ProviderInterface
@@ -21,6 +23,7 @@ class ProductProvider implements ProviderInterface
         private EntityManagerInterface $entityManagerInterface,
         private ProductRepository $productRepository,
         private MailerInterface $mailer,
+        private MessageBusInterface $messageBusInterface,
     )
     {}
 
@@ -44,24 +47,11 @@ class ProductProvider implements ProviderInterface
 
         $this->productRepository->updateViews($id);
 
-        $this->mailSender($product->name, $product->description, $product->count, $product->view);
+        $this->messageBusInterface->dispatch(new ConfirmEmail($product));
+
+        // $this->mailSender($product->name, $product->description, $product->count, $product->view);
 
     }
 
-    private function mailSender(string $name, string $description, int $count, int $view):void {
-
-        $format = '<p> Продукт посмотрели %d пользователей <br> Наименование продукта %s <br> Описание продукта %s <br> Количество товара %d <br> </p>';
-
-        $text =sprintf($format, $view, $name, $description, $count);
-
-        $mail=(new Email())
-            ->from('andreidemianov2013@yandex.ru')
-            ->to('andreidemianov2016@yandex.ru')
-            ->subject('Уведомление о просмотрах товара')
-            ->text('Sending emails is fun again!')
-            ->html($text);
-
-        $this->mailer->send($mail);
-    }
 
 }
