@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
+use App\State\ProductProvider;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['product:read']],
@@ -21,7 +22,7 @@ use ApiPlatform\Metadata\Link;
 )]
 #[GetCollection]
 // #[Get(security: "is_granted('PRODUCT_READ', object)")]
-#[Get()]
+#[Get(provider: ProductProvider::class)]
 #[Delete(security: "is_granted('PRODUCT_DELETE', object)")]
 #[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)")]
 #[Put(securityPostDenormalize: "is_granted('PRODUCT_EDIT', object)")]

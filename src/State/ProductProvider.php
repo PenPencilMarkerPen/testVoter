@@ -1,57 +1,52 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\State;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use App\Entity\Product;
-use App\Repository\ProductRepository;
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
+use App\Repository\ProductRepository;
 use Symfony\Component\Mime\Email;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Product;
 
-class ProductSubscriber implements EventSubscriberInterface {
-    
+
+class ProductProvider implements ProviderInterface
+{
+
     public function __construct(
+        #[Autowire(service: 'api_platform.doctrine.orm.state.item_provider')]
+        private ProviderInterface $itemProvider,
         private EntityManagerInterface $entityManagerInterface,
         private ProductRepository $productRepository,
         private MailerInterface $mailer,
     )
     {}
 
-    public static function getSubscribedEvents()
-    {   
-        return [
-            // KernelEvents::RESPONSE => [
-            //     'onUpdateViews'
-            // ]
-        ];
+
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    {
+        if ($id = $uriVariables['id'])
+        {
+            $this->onUpdateViews($id);
+        }
+
+        return $this->itemProvider->provide($operation, $uriVariables, $context);
     }
 
-    public function onUpdateViews (ResponseEvent $responseEvent)
-    {
-        $request = $responseEvent->getRequest();
-        $path = $request->getPathInfo();
-        $routeParams = $request->attributes->get('_route_params');
+    private function onUpdateViews(int $id){
 
-        if (!$request->isMethod(Request::METHOD_GET) || !preg_match('#^/api/products/\d+#', $path))
-            return;
-        
-        $productId = $routeParams['id'];
-
-        $product = $this->entityManagerInterface->getRepository(Product::class)->find($productId);
+        $product = $this->entityManagerInterface->getRepository(Product::class)->find($id);
 
         if (!$product instanceof Product)
             return;
 
-        $this->productRepository->updateViews($productId);
+        $this->productRepository->updateViews($id);
 
         $this->mailSender($product->name, $product->description, $product->count, $product->view);
-        // var_dump($product->name);
-    }
 
+    }
 
     private function mailSender(string $name, string $description, int $count, int $view):void {
 
