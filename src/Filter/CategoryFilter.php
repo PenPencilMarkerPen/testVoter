@@ -11,16 +11,14 @@ class CategoryFilter extends AbstractFilter {
     
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
-        dump($queryBuilder);
        $alias = $queryBuilder->getRootAliases()[0];
-       if ($property == 'popular')
-       {
-            $this->selectPopularProducts($queryBuilder, $alias);
-       }
-       elseif($property == 'new')
-       {
-            $this->selectNewProducts($queryBuilder, $alias);
-       }
+    
+        match ($property) {
+            'popular' => $this->selectPopularProducts($queryBuilder, $alias),
+            'new' => $this->selectNewProducts($queryBuilder, $alias),
+            default => 0,
+        };
+
        return;
     }
 
@@ -41,13 +39,13 @@ class CategoryFilter extends AbstractFilter {
         ];
     }
 
-    private function selectPopularProducts(QueryBuilder $queryBuilder, $alias)
+    private function selectPopularProducts(QueryBuilder $queryBuilder, $alias):void
     {
         $queryBuilder->andWhere(sprintf('%s.view > 10', $alias))
         ->addOrderBy(sprintf('%s.view', $alias), 'DESC');
     }
 
-    private function selectNewProducts(QueryBuilder $queryBuilder, $alias)
+    private function selectNewProducts(QueryBuilder $queryBuilder, $alias):void
     {
 
         $date = new \DateTimeImmutable();

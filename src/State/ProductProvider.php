@@ -42,7 +42,7 @@ class ProductProvider implements ProviderInterface
 
         $product = $this->entityManagerInterface->getRepository(Product::class)->find($id);
 
-        if (!$product instanceof Product)
+        if (null===$product)
             return;
 
         $this->productRepository->updateViews($id);
