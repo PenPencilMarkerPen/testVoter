@@ -33,11 +33,6 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public const USER_READ='user:read';
     public const USER_WRITE='user:write';
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    public int $id;
-
     #[ORM\Column(length: 180)]
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public string $email;

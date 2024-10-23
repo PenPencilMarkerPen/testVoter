@@ -6,12 +6,8 @@ use App\Repository\TokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TokenRepository::class)]
-class Token
+class Token extends BaseEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    public int $id;
 
     #[ORM\Column(length: 255)]
     public string $token;

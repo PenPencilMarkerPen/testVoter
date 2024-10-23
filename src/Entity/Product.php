@@ -36,15 +36,11 @@ use App\State\ProductProvider;
         new GetCollection()
     ],
 )]
-class Product
+class Product extends BaseEntity
 {
     public const PRODUCT_READ='product:read';
     public const PRODUCT_WRITE='product:write';
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    public int $id;
 
     #[ORM\Column(length: 65)]
     #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]

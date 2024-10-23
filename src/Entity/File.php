@@ -26,15 +26,10 @@ use ApiPlatform\Metadata\Delete;
 #[Delete(security: "is_granted('FILE_DELETE', object)")]
 #[Vich\Uploadable]
 #[ORM\Entity()]
-class File
+class File extends BaseEntity
 {
     public const FILE_READ='file:read';
     public const FILE_WRITE='file:write';
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    public int $id;
 
     #[Groups([self::FILE_READ])]
     #[ORM\Column()]

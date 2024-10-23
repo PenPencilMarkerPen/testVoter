@@ -27,16 +27,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Post(securityPostDenormalize: "is_granted('BRAND_CREATE', object)")]
 #[Put(securityPostDenormalize: "is_granted('BRAND_EDIT', object)")]
 #[ORM\Entity()]
-class Brand
+class Brand extends BaseEntity
 {  
     public const BRAND_READ='brand:read';
     public const BRAND_WRITE='brand:write';
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    public int $id;
-
+    
     #[ORM\Column(length: 65)]
     #[Groups([self::BRAND_READ, self::BRAND_WRITE])]
     public string $name;
