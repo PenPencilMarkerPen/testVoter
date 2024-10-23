@@ -38,37 +38,40 @@ use App\State\ProductProvider;
 )]
 class Product
 {
+    public const PRODUCT_READ='product:read';
+    public const PRODUCT_WRITE='product:write';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     public int $id;
 
     #[ORM\Column(length: 65)]
-    #[Groups(['product:read', 'product:write'])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
     public string $name;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['product:read', 'product:write'])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
     public ?string $description = null;
 
     #[ORM\Column(nullable: false)]
-    #[Groups(['product:read', 'product:write'])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
     public int $count = 0;
 
     #[ORM\Column(nullable: false)]
-    #[Groups(['product:read', 'product:write'])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
     public int $view = 0;
 
     #[ORM\Column(nullable: false)]
-    #[Groups(['product:read', 'product:write'])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
     public bool $isVisible = false;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[Groups(['product:read', 'product:write'])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
     private ?Brand $brand = null;
 
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'product')]
-    #[Groups(['product:read'])]
+    #[Groups([self::PRODUCT_READ])]
     private Collection $files;
 
     public function __construct()

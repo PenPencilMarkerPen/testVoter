@@ -28,31 +28,33 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
 )]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public const USER_READ='user:read';
+    public const USER_WRITE='user:write';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     public int $id;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups([self::USER_READ, self::USER_WRITE])]
     public string $email;
 
     #[ORM\Column]
-    #[Groups(['user:read'])]
+    #[Groups([self::USER_READ])]
     private array $roles=[];
 
     #[ORM\Column]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups([self::USER_READ, self::USER_WRITE])]
     private string $password;
 
     #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'users')]
     private Collection $tokens;
 
     #[ORM\OneToMany(targetEntity: Brand::class, mappedBy: 'users')]
-    #[Groups(['user:read'])]
-
+    #[Groups([self::USER_READ])]
     private Collection $brands;
 
     public function __construct()
@@ -94,10 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
+    {}
 
 
     public function getTokens(): Collection

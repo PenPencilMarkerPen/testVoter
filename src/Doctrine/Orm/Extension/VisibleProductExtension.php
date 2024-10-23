@@ -10,7 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Entity\Product;
 
-final readonly class VisibleProductExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface {
+final readonly class VisibleProductExtension implements QueryCollectionExtensionInterface {
 
     public function __construct(
         private Security $security,
@@ -20,11 +20,6 @@ final readonly class VisibleProductExtension implements QueryCollectionExtension
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
     {
         $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, ?Operation $operation = null, array $context = []): void
-    {
-        
     }
 
     private function AddWhere(QueryBuilder $queryBuilder, string $resourceClass):void {

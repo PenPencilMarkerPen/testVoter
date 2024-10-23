@@ -25,32 +25,35 @@ use ApiPlatform\Metadata\Delete;
 #[GetCollection()]
 #[Delete(security: "is_granted('FILE_DELETE', object)")]
 #[Vich\Uploadable]
-#[ORM\Entity(repositoryClass: FileRepository::class)]
+#[ORM\Entity()]
 class File
 {
+    public const FILE_READ='file:read';
+    public const FILE_WRITE='file:write';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     public int $id;
 
-    #[Groups(['file:read'])]
+    #[Groups([self::FILE_READ])]
     #[ORM\Column()]
     public ?string $mimeType = null;
 
-    #[Groups(['file:write'])]
+    #[Groups([self::FILE_WRITE])]
     #[Vich\UploadableField(mapping: 'files', fileNameProperty: 'filePath', mimeType: 'mimeType', size: 'fileSize')]
     public FileApi $file;
 
     #[ORM\Column()] 
-    #[Groups(['product:read','file:read'])]
+    #[Groups([self::FILE_READ])]
     public ?string $filePath = null;
 
     #[ORM\Column()] 
-    #[Groups(['file:read'])]
+    #[Groups([self::FILE_READ])]
     public ?string $fileSize = null;
 
     #[ORM\ManyToOne(inversedBy: 'files')]
-    #[Groups(['file:read', 'file:write'])]
+    #[Groups([self::FILE_WRITE,self::FILE_READ])]
     private ?Product $product = null;
 
     public function getProduct(): ?Product

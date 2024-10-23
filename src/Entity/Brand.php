@@ -19,31 +19,34 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['brand:read']],
     denormalizationContext: ['groups' => ['brand:write']],
 )]
-// #[GetCollection]
+#[GetCollection]
 #[Get(security: "is_granted('BRAND_READ', object)")]
 // #[Get()]
 // #[Put(security: "is_granted('BRAND_EDIT', object)")]
 #[Delete(security: "is_granted('BRAND_DELETE', object)")]
 #[Post(securityPostDenormalize: "is_granted('BRAND_CREATE', object)")]
 #[Put(securityPostDenormalize: "is_granted('BRAND_EDIT', object)")]
-#[ORM\Entity(repositoryClass: BrandRepository::class)]
+#[ORM\Entity()]
 class Brand
 {  
+    public const BRAND_READ='brand:read';
+    public const BRAND_WRITE='brand:write';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     public int $id;
 
     #[ORM\Column(length: 65)]
-    #[Groups(['brand:read', 'brand:write'])]
+    #[Groups([self::BRAND_READ, self::BRAND_WRITE])]
     public string $name;
 
     #[ORM\ManyToOne(inversedBy: 'brands')]
-    #[Groups(['brand:read', 'brand:write'])]
-    private ?User $users = null;
+    #[Groups([self::BRAND_READ, self::BRAND_WRITE])]
+    private ?User $users = null;   
 
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'brand')]
-    #[Groups(['brand:read'])]
+    #[Groups([self::BRAND_READ])]
     private Collection $products;
 
     public function __construct()

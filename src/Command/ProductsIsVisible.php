@@ -26,14 +26,11 @@ class ProductsIsVisible extends Command {
     {
         $text = 'Обновлена информация о доступных товарах';
 
-        $products = $this->product->updateIsVisible(0);
+        $this->product->updateIsVisible(0);
 
         $output->writeln($text.'!');
 
-        if ($products > 0)
-            return Command::SUCCESS;
-
-        return Command::FAILURE;
+        return Command::SUCCESS;
     }
 
 
