@@ -26,7 +26,10 @@ class CategoryFilter extends AbstractFilter {
     // описание для swagger
     public function getDescription(string $resourceClass): array
     {
-        return [];
+        return [
+            'popular'=>[],
+            'new'=>[]
+        ];
     }
 
     private function selectPopularProducts(QueryBuilder $queryBuilder, $alias)
