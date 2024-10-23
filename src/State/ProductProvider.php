@@ -42,6 +42,9 @@ class ProductProvider implements ProviderInterface
 
         $product = $this->entityManagerInterface->getRepository(Product::class)->find($id);
 
+        if (!$product instanceof Product)
+            return;
+
         $this->productRepository->updateViews($id);
 
         $this->messageBusInterface->dispatch(new ConfirmEmail($product));

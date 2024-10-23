@@ -11,6 +11,7 @@ class CategoryFilter extends AbstractFilter {
     
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
+        dump($queryBuilder);
        $alias = $queryBuilder->getRootAliases()[0];
        if ($property == 'popular')
        {
@@ -26,8 +27,16 @@ class CategoryFilter extends AbstractFilter {
     // описание для swagger
     public function getDescription(string $resourceClass): array
     {
+
         return [
-            'popular'=>[],
+            'popular'=>[
+                'property' => null,
+                'type' => 'none',
+                'required' => false,
+                'openapi' => [
+                    'вывод наиболее популярных товаров!',
+                ]
+            ],
             'new'=>[]
         ];
     }
