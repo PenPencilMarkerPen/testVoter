@@ -15,12 +15,14 @@ use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
 use App\State\ProductProvider;
+use ApiPlatform\Metadata\ApiFilter;
+use App\Filter\CategoryFilter;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['product:read']],
     denormalizationContext: ['groups' => ['product:write']],
 )]
-#[GetCollection]
+#[GetCollection()]
 // #[Get(security: "is_granted('PRODUCT_READ', object)")]
 #[Get(provider: ProductProvider::class)]
 #[Delete(security: "is_granted('PRODUCT_DELETE', object)")]
@@ -36,6 +38,7 @@ use App\State\ProductProvider;
         new GetCollection()
     ],
 )]
+#[ApiFilter(CategoryFilter::class, properties: ['new', 'popular', 'name'])]
 class Product extends BaseEntity
 {
     public const PRODUCT_READ='product:read';
