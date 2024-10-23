@@ -38,7 +38,7 @@ use App\Filter\CategoryFilter;
         new GetCollection()
     ],
 )]
-#[ApiFilter(CategoryFilter::class, properties: ['new', 'popular', 'name'])]
+#[ApiFilter(CategoryFilter::class)]
 class Product extends BaseEntity
 {
     public const PRODUCT_READ='product:read';
