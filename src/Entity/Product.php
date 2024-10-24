@@ -43,6 +43,8 @@ class Product extends BaseEntity
 {
     public const PRODUCT_READ='product:read';
     public const PRODUCT_WRITE='product:write';
+    public const PRODUCT_READ_OWNER ='owner:read';
+    public const PRODUCT_WRITE_OWNER ='owner:write';
 
 
     #[ORM\Column(length: 65)]
@@ -54,15 +56,15 @@ class Product extends BaseEntity
     public ?string $description = null;
 
     #[ORM\Column(nullable: false)]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE_OWNER])]
     public int $count = 0;
 
     #[ORM\Column(nullable: false)]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
+    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ_OWNER])]
     public int $view = 0;
 
     #[ORM\Column(nullable: false)]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
+    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ_OWNER])]
     public bool $isVisible = false;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
@@ -72,6 +74,11 @@ class Product extends BaseEntity
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'product')]
     #[Groups([self::PRODUCT_READ])]
     private Collection $files;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE,  self::PRODUCT_WRITE_OWNER])]
+    private Category $category;
+
 
     public function __construct()
     {
@@ -88,6 +95,18 @@ class Product extends BaseEntity
     {
         $this->brand = $brand;
 
+        return $this;
+    }
+
+    public function getCategory(): Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): static
+    {
+        $this->category = $category;
+        
         return $this;
     }
 

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity()]
+
 class FilesCustom extends BaseEntity{
     
     #[ORM\Column(type: 'string')]

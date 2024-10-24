@@ -20,6 +20,7 @@ abstract class BaseEntity {
     public ?\DateTimeImmutable $date=null;
 
     #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function onPrePersist(): void
     {
         $this->date = new \DateTimeImmutable();
