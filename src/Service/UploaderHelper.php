@@ -26,7 +26,7 @@ class UploaderHelper{
         return $resultUploadFile;
     }
 
-    public function getFileName()
+    public function getFileName():string
     {
         return $this->filename;
     }
