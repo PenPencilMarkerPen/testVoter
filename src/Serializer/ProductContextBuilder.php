@@ -24,7 +24,8 @@ class ProductContextBuilder implements SerializerContextBuilderInterface {
     {
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
        
-        if ($context['resource_class'] !== Product::class)
+
+        if ($context['resource_class'] !== Product::class || !isset($context['uri_variables']) || !isset($context['uri_variables']['id']) )
         {
             return $context;
         }

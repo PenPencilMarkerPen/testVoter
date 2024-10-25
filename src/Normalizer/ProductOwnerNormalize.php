@@ -41,6 +41,8 @@ class ProductOwnerNormalize implements NormalizerInterface, SerializerAwareInter
         }
 
         return $data instanceof Product;
+
+        // return false;
     }
 
     public function getSupportedTypes(?string $format): array{
