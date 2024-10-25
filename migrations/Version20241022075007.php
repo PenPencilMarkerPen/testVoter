@@ -19,7 +19,6 @@ final class Version20241022075007 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE file (id SERIAL NOT NULL, product_id INT DEFAULT NULL, mime_type VARCHAR(255) NOT NULL, file_path VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_8C9F36104584665A ON file (product_id)');
         $this->addSql('ALTER TABLE file ADD CONSTRAINT FK_8C9F36104584665A FOREIGN KEY (product_id) REFERENCES product (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -27,8 +26,6 @@ final class Version20241022075007 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE file DROP CONSTRAINT FK_8C9F36104584665A');
         $this->addSql('DROP TABLE file');
     }
