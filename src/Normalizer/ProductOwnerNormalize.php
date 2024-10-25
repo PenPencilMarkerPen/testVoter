@@ -23,7 +23,6 @@ class ProductOwnerNormalize implements NormalizerInterface, SerializerAwareInter
 
     public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null {
 
-        dump($context);
 
         if ($object instanceof Product && $this->security->getUser() == $object->getBrand()->getUsers())
         {
