@@ -19,7 +19,6 @@ final class Version20241023083930 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE brand ADD date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
         $this->addSql('COMMENT ON COLUMN brand.date IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('ALTER TABLE file ADD date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
@@ -34,8 +33,6 @@ final class Version20241023083930 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE token DROP date');
         $this->addSql('ALTER TABLE brand DROP date');
         $this->addSql('ALTER TABLE "user" DROP date');
