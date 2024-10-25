@@ -28,7 +28,8 @@ use App\Filter\CategoryFilter;
 #[Delete(security: "is_granted('PRODUCT_DELETE', object)")]
 #[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)", 
 denormalizationContext: ['groups' => ['product:write']])]
-#[Put(securityPostDenormalize: "is_granted('PRODUCT_EDIT', object)")]
+#[Put(securityPostDenormalize: "is_granted('PRODUCT_EDIT', object)", 
+denormalizationContext: ['groups' => ['product_put:write']])]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
     uriTemplate: '/brand/{brandId}/products',
@@ -46,13 +47,14 @@ class Product extends BaseEntity
     public const PRODUCT_WRITE='product:write';
     public const PRODUCT_READ_OWNER ='owner:read';
     public const PRODUCT_WRITE_OWNER ='owner:write';
+    public const PRODUCT_PUT_WRITE='product_put:write';
 
     #[ORM\Column(length: 65)]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE, self::PRODUCT_PUT_WRITE])]
     public string $name;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE, self::PRODUCT_PUT_WRITE])]
     public ?string $description = null;
 
     #[ORM\Column(nullable: false)]
@@ -60,7 +62,7 @@ class Product extends BaseEntity
     public int $count = 0;
 
     #[ORM\Column(nullable: false)]
-    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ])]
+    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ, self::PRODUCT_PUT_WRITE])]
     public int $view = 0;
 
     #[ORM\Column(nullable: false)]
@@ -68,7 +70,7 @@ class Product extends BaseEntity
     public bool $isVisible = false;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE, self::PRODUCT_PUT_WRITE])]
     private ?Brand $brand = null;
 
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'product')]
@@ -76,7 +78,7 @@ class Product extends BaseEntity
     private Collection $files;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE,  self::PRODUCT_WRITE_OWNER])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE,  self::PRODUCT_WRITE_OWNER, self::PRODUCT_PUT_WRITE])]
     private Category $category;
 
 
