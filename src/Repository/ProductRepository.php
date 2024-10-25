@@ -25,7 +25,6 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
 
-        return  $qb;
     } 
 
     public function updateViews(int $id)
@@ -38,7 +37,6 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
 
-        return $db;
     }
 
 }

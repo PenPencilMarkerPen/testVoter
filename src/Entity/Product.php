@@ -20,13 +20,14 @@ use App\Filter\CategoryFilter;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['product:read']],
-    denormalizationContext: ['groups' => ['product:write']],
+    // denormalizationContext: ['groups' => ['product:write']],
 )]
 #[GetCollection()]
 // #[Get(security: "is_granted('PRODUCT_READ', object)")]
 #[Get(provider: ProductProvider::class)]
 #[Delete(security: "is_granted('PRODUCT_DELETE', object)")]
-#[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)")]
+#[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)", 
+denormalizationContext: ['groups' => ['product:write']])]
 #[Put(securityPostDenormalize: "is_granted('PRODUCT_EDIT', object)")]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
@@ -46,7 +47,6 @@ class Product extends BaseEntity
     public const PRODUCT_READ_OWNER ='owner:read';
     public const PRODUCT_WRITE_OWNER ='owner:write';
 
-
     #[ORM\Column(length: 65)]
     #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE])]
     public string $name;
@@ -56,15 +56,15 @@ class Product extends BaseEntity
     public ?string $description = null;
 
     #[ORM\Column(nullable: false)]
-    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE_OWNER])]
+    #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE, self::PRODUCT_WRITE_OWNER])]
     public int $count = 0;
 
     #[ORM\Column(nullable: false)]
-    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ_OWNER])]
+    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ])]
     public int $view = 0;
 
     #[ORM\Column(nullable: false)]
-    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ_OWNER])]
+    #[Groups([self::PRODUCT_WRITE, self::PRODUCT_READ_OWNER, self::PRODUCT_WRITE_OWNER])]
     public bool $isVisible = false;
 
     #[ORM\ManyToOne(inversedBy: 'products')]

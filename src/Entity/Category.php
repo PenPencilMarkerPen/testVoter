@@ -7,13 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Metadata\Post;
+use App\Repository\CategoryRepository;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['category:read']],
     denormalizationContext: ['groups' => ['category:write']],
 )]
 #[Post()]
-#[ORM\Entity()]
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category extends BaseEntity{
 
     public const CATEGORY_WRITE='category:read';
