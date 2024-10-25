@@ -26,7 +26,7 @@ class ProductOwnerNormalize implements NormalizerInterface, SerializerAwareInter
 
         if ($object instanceof Product && $this->security->getUser() == $object->getBrand()->getUsers())
         {
-            array_push($context['groups'],Product::PRODUCT_READ_OWNER, Product::PRODUCT_WRITE_OWNER );
+            array_push($context['groups'],Product::PRODUCT_READ_OWNER);
         }
 
         $context[self::ALREADY_CALLED] = true;
