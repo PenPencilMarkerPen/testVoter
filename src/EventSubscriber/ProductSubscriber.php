@@ -10,7 +10,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use ApiPlatform\Symfony\EventListener\EventPriorities;
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\Message\ConfirmEmail;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
+
 
 class ProductSubscriber implements EventSubscriberInterface {
     
@@ -18,20 +22,22 @@ class ProductSubscriber implements EventSubscriberInterface {
         private EntityManagerInterface $entityManagerInterface,
         private ProductRepository $productRepository,
         private MailerInterface $mailer,
+        private MessageBusInterface $messageBusInterface,
     )
     {}
 
     public static function getSubscribedEvents()
     {   
         return [
-            // KernelEvents::RESPONSE => [
-            //     'onUpdateViews'
-            // ]
+            KernelEvents::RESPONSE => [
+               ['onUpdateViews', EventPriorities::POST_RESPOND],
+            ]
         ];
     }
 
-    public function onUpdateViews (ResponseEvent $responseEvent)
+    public function onUpdateViews (ResponseEvent $responseEvent):void
     {
+
         $request = $responseEvent->getRequest();
         $path = $request->getPathInfo();
         $routeParams = $request->attributes->get('_route_params');
@@ -48,25 +54,8 @@ class ProductSubscriber implements EventSubscriberInterface {
 
         $this->productRepository->updateViews($productId);
 
-        $this->mailSender($product->name, $product->description, $product->count, $product->view);
-        // var_dump($product->name);
+        $this->messageBusInterface->dispatch(new ConfirmEmail($product));
     }
 
-
-    private function mailSender(string $name, string $description, int $count, int $view):void {
-
-        $format = '<p> Продукт посмотрели %d пользователей <br> Наименование продукта %s <br> Описание продукта %s <br> Количество товара %d <br> </p>';
-
-        $text =sprintf($format, $view, $name, $description, $count);
-
-        $mail=(new Email())
-            ->from('andreidemianov2013@yandex.ru')
-            ->to('andreidemianov2016@yandex.ru')
-            ->subject('Уведомление о просмотрах товара')
-            ->text('Sending emails is fun again!')
-            ->html($text);
-
-        $this->mailer->send($mail);
-    }
 
 }

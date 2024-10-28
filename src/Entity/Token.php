@@ -13,17 +13,6 @@ class Token extends BaseEntity
     public string $token;
 
     #[ORM\ManyToOne(inversedBy: 'tokens')]
-    private ?User $users;
+    public ?User $users;
 
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
-
-    public function setUsers(?User $users): static
-    {
-        $this->users = $users;
-
-        return $this;
-    }
 }

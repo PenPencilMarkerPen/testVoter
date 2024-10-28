@@ -34,7 +34,7 @@ class ProductContextBuilder implements SerializerContextBuilderInterface {
         $user = $this->security->getUser();
         $product=$this->getProduct($id);
 
-        if ($product &&  $user===$product->getBrand()->getUsers())
+        if ($product &&  $user===$product->brand->users)
         {
             $context['groups'][] = $normalization ? Product::PRODUCT_READ_OWNER : Product::PRODUCT_WRITE_OWNER;
         }

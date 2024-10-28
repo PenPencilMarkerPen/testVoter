@@ -32,7 +32,7 @@ class BrandVoter extends Voter{
 
         if ($this->security->isGranted('ROLE_USER'))
         {
-            return $user===$subject->getUsers();
+            return $user===$subject->users;
         }
         
         return false;

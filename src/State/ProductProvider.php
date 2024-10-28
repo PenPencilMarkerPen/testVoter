@@ -7,13 +7,12 @@ use ApiPlatform\State\ProviderInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use App\Repository\ProductRepository;
-use Symfony\Component\Mime\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Product;
 use Symfony\Component\Messenger\MessageBusInterface;
 use App\Message\ConfirmEmail;
 
-
+  
 class ProductProvider implements ProviderInterface
 {
 

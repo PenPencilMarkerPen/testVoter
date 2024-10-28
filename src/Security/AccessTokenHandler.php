@@ -20,7 +20,7 @@ class AccessTokenHandler implements AccessTokenHandlerInterface {
     {
         $token = $this->tokenRepository->findOneBy(['token' => $accessToken]);
 
-        $user = $token->getUsers();
+        $user = $token->users;
 
         if ($user === null)
             throw new BadCredentialsException('Invalid credentials');

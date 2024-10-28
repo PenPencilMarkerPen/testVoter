@@ -27,11 +27,11 @@ class FileVoter extends Voter {
         $user = $token->getUser();
 
         if (!$user instanceof UserInterface)
-            return false;
+            return false;  
 
         if ($this->security->isGranted('ROLE_USER'))
         {
-            return $user===$subject->getProduct()->getBrand()->getUsers();
+            return $user===$subject->product->brand->users;
         }
 
         return false;

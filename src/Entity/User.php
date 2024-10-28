@@ -25,8 +25,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new GetCollection()
     ],
-    normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']],
+    normalizationContext: ['groups' => [self::USER_READ]],
+    denormalizationContext: ['groups' => [self::USER_WRITE]],
 )]
 class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -46,11 +46,11 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     private string $password;
 
     #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'users')]
-    private Collection $tokens;
+    public Collection $tokens;
 
     #[ORM\OneToMany(targetEntity: Brand::class, mappedBy: 'users')]
     #[Groups([self::USER_READ])]
-    private Collection $brands;
+    public Collection $brands;
 
     public function __construct()
     {
@@ -93,55 +93,4 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public function eraseCredentials(): void
     {}
 
-
-    public function getTokens(): Collection
-    {
-        return $this->tokens;
-    }
-
-    public function addToken(Token $token): static
-    {
-        if (!$this->tokens->contains($token)) {
-            $this->tokens->add($token);
-            $token->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeToken(Token $token): static
-    {
-        if ($this->tokens->removeElement($token)) {
-            if ($token->getUsers() === $this) {
-                $token->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getBrands(): Collection
-    {
-        return $this->brands;
-    }
-
-    public function addBrand(Brand $brand): static
-    {
-        if (!$this->brands->contains($brand)) {
-            $this->brands->add($brand);
-            $brand->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBrand(Brand $brand): static
-    {
-        if ($this->brands->removeElement($brand)) {
-            if ($brand->getUsers() === $this) {
-                $brand->setUsers(null);
-            }
-        }
-        return $this;
-    }
 }

@@ -225,6 +225,9 @@
             "config/routes/web_profiler.yaml"
         ]
     },
+    "twig/extra-bundle": {
+        "version": "v3.13.0"
+    },
     "vich/uploader-bundle": {
         "version": "2.4",
         "recipe": {

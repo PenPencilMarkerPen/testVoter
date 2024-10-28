@@ -10,8 +10,8 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\CategoryRepository;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['category:read']],
-    denormalizationContext: ['groups' => ['category:write']],
+    normalizationContext: ['groups' => [self::CATEGORY_READ]],
+    denormalizationContext: ['groups' => [self::CATEGORY_WRITE]],
 )]
 #[Post()]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -21,9 +21,10 @@ class Category extends BaseEntity{
     public const CATEGORY_READ='category:write';
 
     #[ORM\Column(length: 65)]
-    #[Groups([self::CATEGORY_READ, self::CATEGORY_WRITE])]
+    #[Groups([Product::PRODUCT_READ, self::CATEGORY_READ, self::CATEGORY_WRITE])]
     public string $category;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
-    public Collection $products;
+    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'categories')]
+    public  $products;
+
 }

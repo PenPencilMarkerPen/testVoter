@@ -31,7 +31,7 @@ class ProductVoter extends Voter {
 
         if ($this->security->isGranted('ROLE_USER'))
         {
-            return $user===$subject->getBrand()->getUsers();
+            return $user===$subject->brand->users;
         }
         return true;
     }

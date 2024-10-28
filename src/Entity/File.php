@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\Delete;
 
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['file:read']],
-    denormalizationContext: ['groups' => ['file:write']],
+    normalizationContext: ['groups' => [self::FILE_READ]],
+    denormalizationContext: ['groups' => [self::FILE_WRITE]],
 )]
 #[Post(
     outputFormats: ['jsonld' => ['application/ld+json']],
@@ -35,12 +35,12 @@ class File extends BaseEntity
     #[ORM\Column()]
     public ?string $mimeType = null;
 
-    #[Groups([self::FILE_WRITE])]
+    #[Groups([self::FILE_WRITE])]  
     #[Vich\UploadableField(mapping: 'files', fileNameProperty: 'filePath', mimeType: 'mimeType', size: 'fileSize')]
     public FileApi $file;
 
     #[ORM\Column()] 
-    #[Groups([self::FILE_READ])]
+    #[Groups([Product::PRODUCT_READ, self::FILE_READ])]
     public ?string $filePath = null;
 
     #[ORM\Column()] 
@@ -49,17 +49,6 @@ class File extends BaseEntity
 
     #[ORM\ManyToOne(inversedBy: 'files')]
     #[Groups([self::FILE_WRITE,self::FILE_READ])]
-    private ?Product $product = null;
+    public ?Product $product = null;
 
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): static
-    {
-        $this->product = $product;
-
-        return $this;
-    }
 }

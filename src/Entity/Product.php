@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -14,22 +13,20 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
-use App\State\ProductProvider;
 use ApiPlatform\Metadata\ApiFilter;
 use App\Filter\CategoryFilter;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['product:read']],
-    // denormalizationContext: ['groups' => ['product:write']],
+    normalizationContext: ['groups' => [self::PRODUCT_READ]],
 )]
 #[GetCollection()]
-// #[Get(security: "is_granted('PRODUCT_READ', object)")]
-#[Get(provider: ProductProvider::class)]
+#[Get()]
 #[Delete(security: "is_granted('PRODUCT_DELETE', object)")]
 #[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)", 
-denormalizationContext: ['groups' => ['product:write']])]
-#[Put(securityPostDenormalize: "is_granted('PRODUCT_EDIT', object)", 
-denormalizationContext: ['groups' => ['product_put:write']])]
+denormalizationContext: ['groups' => [self::PRODUCT_WRITE]])]
+#[Put(
+    securityPostDenormalize: "is_granted('PRODUCT_EDIT', object)", 
+)]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
     uriTemplate: '/brand/{brandId}/products',
@@ -71,70 +68,14 @@ class Product extends BaseEntity
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE, self::PRODUCT_PUT_WRITE])]
-    private ?Brand $brand = null;
+    public ?Brand $brand = null;
 
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'product')]
     #[Groups([self::PRODUCT_READ])]
-    private Collection $files;
+    public Collection $files;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE,  self::PRODUCT_WRITE_OWNER, self::PRODUCT_PUT_WRITE])]
-    private Category $category;
+    public  $categories;
 
-
-    public function __construct()
-    {
-        $this->files = new ArrayCollection();
-    }
-
-
-    public function getBrand(): ?Brand
-    {
-        return $this->brand;
-    }
-
-    public function setBrand(?Brand $brand): static
-    {
-        $this->brand = $brand;
-
-        return $this;
-    }
-
-    public function getCategory(): Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(Category $category): static
-    {
-        $this->category = $category;
-        
-        return $this;
-    }
-
-    public function getFiles(): Collection
-    {
-        return $this->files;
-    }
-
-    public function addFile(File $file): static
-    {
-        if (!$this->files->contains($file)) {
-            $this->files->add($file);
-            $file->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFile(File $file): static
-    {
-        if ($this->files->removeElement($file)) {
-            if ($file->getProduct() === $this) {
-                $file->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
 }
