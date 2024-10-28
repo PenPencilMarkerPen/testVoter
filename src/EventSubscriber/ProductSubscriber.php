@@ -29,9 +29,8 @@ class ProductSubscriber implements EventSubscriberInterface {
     public static function getSubscribedEvents()
     {   
         return [
-            KernelEvents::RESPONSE => [
+            KernelEvents::RESPONSE => 
                ['onUpdateViews', EventPriorities::POST_RESPOND],
-            ]
         ];
     }
 
@@ -39,7 +38,7 @@ class ProductSubscriber implements EventSubscriberInterface {
     {
 
         $request = $responseEvent->getRequest();
-        $path = $request->getPathInfo();
+        $path = $request->getPathInfo();  
         $routeParams = $request->attributes->get('_route_params');
 
         if (!$request->isMethod(Request::METHOD_GET) || !preg_match('#^/api/products/\d+#', $path))
