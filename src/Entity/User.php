@@ -52,12 +52,6 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     #[Groups([self::USER_READ])]
     public Collection $brands;
 
-    public function __construct()
-    {
-        $this->tokens = new ArrayCollection();
-        $this->brands = new ArrayCollection();
-    }
-
     public function getUserIdentifier(): string
     {
         return (string) $this->email;

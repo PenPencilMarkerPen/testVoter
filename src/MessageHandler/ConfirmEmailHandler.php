@@ -5,7 +5,6 @@ namespace App\MessageHandler;
 use App\Message\ConfirmEmail;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 

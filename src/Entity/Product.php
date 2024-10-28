@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\ApiFilter;
 use App\Filter\CategoryFilter;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ApiResource(
     normalizationContext: ['groups' => [self::PRODUCT_READ]],
@@ -76,6 +77,6 @@ class Product extends BaseEntity
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     #[Groups([self::PRODUCT_READ, self::PRODUCT_WRITE,  self::PRODUCT_WRITE_OWNER, self::PRODUCT_PUT_WRITE])]
-    public  $categories;
+    public $categories;
 
 }
