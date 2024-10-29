@@ -86,4 +86,15 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public function eraseCredentials(): void
     {}
 
+    public function addToken(Token $token):self
+    {
+        if (!$this->tokens->contains($token))
+        {
+            $this->tokens->add($token);
+            $token->users = $this;
+        }
+
+        return $this;
+    }
+
 }

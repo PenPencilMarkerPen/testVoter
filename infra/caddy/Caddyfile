@@ -1,0 +1,15 @@
+localhost:80 {
+	root * /var/www/project/public
+    
+	encode gzip
+
+	php_fastcgi app:9000
+
+    file_server
+
+    @phpFile {
+        path *.php*
+    }
+
+    error @phpFile "Not found" 404
+}

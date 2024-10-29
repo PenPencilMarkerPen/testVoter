@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_tttttttes
+    ports:
+      - "9070:80"
+    volumes:
+      - "./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+      - "./public:/var/www/project/public"
+    depends_on:
+      - app
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: infra/php/Dockerfile
+    volumes:
+      - "./:/var/www/project"
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres_teeeeeest
+    image: postgres:latest
+    ports:
+      - "7536:5432"
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+      - POSTGRES_DB=test
+
+  caddy:
+    image: caddy
+    container_name: caddy_tette
+    ports:
+      - "8090:80"
+    volumes:
+      - "./public:/var/www/project/public"
+      - "./infra/caddy/Caddyfile:/etc/caddy/Caddyfile"
+    depends_on:
+      - app

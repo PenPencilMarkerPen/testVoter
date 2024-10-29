@@ -41,7 +41,7 @@ class ProductSubscriber implements EventSubscriberInterface {
         $path = $request->getPathInfo();  
         $routeParams = $request->attributes->get('_route_params');
 
-        if (!$request->isMethod(Request::METHOD_GET) || !preg_match('#^/api/products/\d+#', $path))
+        if (!$request->isMethod(Request::METHOD_GET) || !preg_match('#^/api/products/\d+#', $path) || !isset($routeParams['id']))
             return;
         
         $productId = $routeParams['id'];

@@ -1,10 +1,5 @@
+version: "3.8"
 services:
-  postgres:
-    image: postgres:16
-    container_name: postgres-secure
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=test
+  app:
     ports:
-      - "7654:5432"
+      - "7777:9000"
