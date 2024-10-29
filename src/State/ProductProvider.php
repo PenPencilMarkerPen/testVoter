@@ -47,7 +47,6 @@ class ProductProvider implements ProviderInterface
             );
         }
 
-        return $this->itemProvider->provide($operation, $uriVariables, $context);
     }
 
     private function countTotalProducts():int {
