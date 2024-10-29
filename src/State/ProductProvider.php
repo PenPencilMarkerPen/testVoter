@@ -9,7 +9,6 @@ use ApiPlatform\State\ProviderInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Product;
 use ApiPlatform\State\Pagination\TraversablePaginator;
 
 
