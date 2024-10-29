@@ -23,19 +23,11 @@ services:
       $uploadsPath: "%kernel.project_dir%/public/uploads"
 
   'App\Normalizer\ProductOwnerNormalize':
-    # By default .inner is passed as argument
+    #   # By default .inner is passed as argument
     decorates: "api_platform.jsonld.normalizer.item"
   # 'App\Serializer\ProductContextBuilder':
   #   decorates: "api_platform.serializer.context_builder"
   #   arguments: ['@App\Serializer\ProductContextBuilder.inner']
   #   autoconfigure: false
-
-  App\EventListener\TestListener:
-    tags:
-      - {
-          name: "kernel.event_listener",
-          event: "kernel.view",
-          method: "testEvent",
-        }
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

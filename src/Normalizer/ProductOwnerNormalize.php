@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 
 // #[AsDecorator('api_platform.jsonld.normalizer.item')]
-class ProductOwnerNormalize implements NormalizerInterface, SerializerAwareInterface {
+class ProductOwnerNormalize  implements NormalizerInterface, SerializerAwareInterface {
 
     private const ALREADY_CALLED = 'PRODUCT_ATTRIBUTE_NORMALIZER_ALREADY_CALLED';
 

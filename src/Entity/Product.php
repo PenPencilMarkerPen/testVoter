@@ -23,7 +23,9 @@ use App\State\ProductProvider;
     paginationItemsPerPage: 10,
 )]  
 #[Get()]
-#[GetCollection(provider: ProductProvider::class)]
+#[GetCollection(
+    provider: ProductProvider::class
+    )]
 #[Delete(security: "is_granted('PRODUCT_DELETE', object)")]
 #[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)", 
 denormalizationContext: ['groups' => [self::PRODUCT_WRITE]])]

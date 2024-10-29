@@ -29,15 +29,14 @@ class ProductSubscriber implements EventSubscriberInterface {
     public static function getSubscribedEvents()
     {   
         return [
-            KernelEvents::RESPONSE => 
-               ['onUpdateViews', EventPriorities::POST_RESPOND],
+            KernelEvents::VIEW => 
+               ['onUpdateViews', EventPriorities::PRE_SERIALIZE],
         ];
     }
 
-    public function onUpdateViews (ResponseEvent $responseEvent):void
+    public function onUpdateViews (ViewEvent $event):void
     {
-
-        $request = $responseEvent->getRequest();
+        $request = $event->getRequest();
         $path = $request->getPathInfo();  
         $routeParams = $request->attributes->get('_route_params');
 
@@ -55,6 +54,4 @@ class ProductSubscriber implements EventSubscriberInterface {
 
         $this->messageBusInterface->dispatch(new ConfirmEmail($product));
     }
-
-
 }
