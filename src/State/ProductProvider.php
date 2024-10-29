@@ -2,15 +2,17 @@
 
 namespace App\State;
 
+use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\Pagination\Pagination;
 use ApiPlatform\State\ProviderInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Mailer\MailerInterface;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Product;
-use Symfony\Component\Messenger\MessageBusInterface;
-use App\Message\ConfirmEmail;
+use ApiPlatform\State\Pagination\TraversablePaginator;
+
+
 
   
 class ProductProvider implements ProviderInterface
@@ -21,36 +23,39 @@ class ProductProvider implements ProviderInterface
         private ProviderInterface $itemProvider,
         private EntityManagerInterface $entityManagerInterface,
         private ProductRepository $productRepository,
-        private MailerInterface $mailer,
-        private MessageBusInterface $messageBusInterface,
+        private Pagination $pagination,
     )
     {}
 
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        if ($id = $uriVariables['id'])
-        {
-            $this->onUpdateViews($id);
+        if ($operation instanceof CollectionOperationInterface){
+
+            $currentPage = $this->pagination->getPage($context);
+            $itemsPage = $this->pagination->getLimit($operation, $context);
+            $offset = $this->pagination->getOffset($operation, $context);
+            $totalItems = $this->countTotalProducts();
+
+            $products= $this->createProducts($offset, $itemsPage);
+
+            return new TraversablePaginator(
+                new \ArrayIterator($products),
+                $currentPage,
+                $itemsPage, 
+                $totalItems,
+            );
         }
 
         return $this->itemProvider->provide($operation, $uriVariables, $context);
     }
 
-    private function onUpdateViews(int $id){
-
-        $product = $this->entityManagerInterface->getRepository(Product::class)->find($id);
-
-        if (null===$product)
-            return;
-
-        $this->productRepository->updateViews($id);
-
-        $this->messageBusInterface->dispatch(new ConfirmEmail($product));
-
-        // $this->mailSender($product->name, $product->description, $product->count, $product->view);
-
+    private function countTotalProducts():int {
+        return $this->productRepository->getCountProducts();
     }
 
-
+    private function createProducts(int $offset, int $itemsPage):array
+    {
+        return $this->productRepository->getProducts($offset, $itemsPage);
+    }
 }

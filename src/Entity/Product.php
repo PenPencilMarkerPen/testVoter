@@ -16,12 +16,14 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\ApiFilter;
 use App\Filter\CategoryFilter;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\State\ProductProvider;
 
 #[ApiResource(
     normalizationContext: ['groups' => [self::PRODUCT_READ]],
-)]
-#[GetCollection()]
+    paginationItemsPerPage: 10,
+)]  
 #[Get()]
+#[GetCollection(provider: ProductProvider::class)]
 #[Delete(security: "is_granted('PRODUCT_DELETE', object)")]
 #[Post(securityPostDenormalize: "is_granted('PRODUCT_CREATE', object)", 
 denormalizationContext: ['groups' => [self::PRODUCT_WRITE]])]
@@ -35,7 +37,7 @@ denormalizationContext: ['groups' => [self::PRODUCT_WRITE]])]
         'brandId' => new Link(fromClass: Brand::class, fromProperty: 'products'),
     ],
     operations: [
-        new GetCollection()
+        new GetCollection(),
     ],
 )]
 #[ApiFilter(CategoryFilter::class)]
