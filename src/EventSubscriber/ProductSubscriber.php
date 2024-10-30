@@ -53,5 +53,6 @@ class ProductSubscriber implements EventSubscriberInterface {
         $this->productRepository->updateViews($productId);
 
         $this->messageBusInterface->dispatch(new ConfirmEmail($product));
+
     }
 }

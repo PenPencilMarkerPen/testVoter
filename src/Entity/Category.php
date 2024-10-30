@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ApiResource(
     normalizationContext: ['groups' => [self::CATEGORY_READ]],
@@ -25,6 +26,8 @@ class Category extends BaseEntity{
     public string $category;
 
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'categories')]
-    public  $products;
+    public $products;
+
+  
 
 }

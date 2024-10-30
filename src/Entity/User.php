@@ -26,6 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]],
+    paginationItemsPerPage: 10,
 )]
 class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
