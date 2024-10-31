@@ -3,7 +3,8 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use ApiPlatform\Symfony\Bundle\Test\Client;
+use App\Entity\User;
+use App\Factory\UserFactory;
 use Zenstruck\Foundry\Test\ResetDatabase;
 use Zenstruck\Foundry\Test\Factories;
 
@@ -11,11 +12,14 @@ abstract class BaseTest extends ApiTestCase {
  
     use ResetDatabase, Factories;
 
-    protected function createClientWithCredentials()
+    protected string $password;
+
+    protected function createClientWithCredentials(?string $token = null)
     {
         return static::createClient([], ['headers' => [
             'accept' => 'application/ld+json',
             'Content-Type' => 'application/ld+json',
+            'authorization' => 'Bearer '.$token,
         ]]);
     }
 
@@ -29,20 +33,8 @@ abstract class BaseTest extends ApiTestCase {
         ]]);
     }
 
-    protected function getToken($body = []){
-
-        static::createClient()->request('POST', '/api/register',
-        [
-            'headers' => [
-                'accept' => 'application/ld+json',
-                'Content-Type' => 'application/ld+json',
-            ],
-            $body ?: 'json' => [
-                'email' => 'holly1111@yahoo.com',
-                'password' => '12245',
-            ]
-        ]);
-        
+    protected function getToken($body = []): string {
+       
 
         $response = static::createClient()->request('POST', '/api/token/login', [
             'json' => $body ?: [
@@ -55,5 +47,16 @@ abstract class BaseTest extends ApiTestCase {
         $data = $response->toArray();
 
         return $data['token'];
+    }
+
+    protected function getUserCurrent(): User {
+
+        $passwordHash = '$2y$13$wUFdnctpky5vSqWsyGt5cONkKQkah23JqWodiSNDaq5xaEidHKz6u';
+
+        $this->password = 'string';
+
+        $user  = UserFactory::createOne(['password' => $passwordHash]);
+        
+        return $user;
     }
 }

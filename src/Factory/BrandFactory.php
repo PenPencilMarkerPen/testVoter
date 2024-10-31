@@ -9,6 +9,7 @@ use function Zenstruck\Foundry\lazy;
 
 final class BrandFactory extends PersistentProxyObjectFactory {
     
+
     public static function class(): string {
         return Brand::class;
     }
@@ -20,4 +21,4 @@ final class BrandFactory extends PersistentProxyObjectFactory {
             'date' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
-}
+}  

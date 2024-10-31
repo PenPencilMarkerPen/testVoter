@@ -24,7 +24,7 @@ final class UserFactory extends PersistentProxyObjectFactory {
             'password' => $this->passwordHash(self::faker()->password()),
             'date' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
-    }
+    }   
 
     private function passwordHash($password)
     {

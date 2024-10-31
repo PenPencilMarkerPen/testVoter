@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Story\UserStory;
 use App\Story\BrandStory;
+use App\Story\FileStory;
 use App\Story\ProductStory;
 
 class AppFixtures extends Fixture
@@ -15,7 +16,6 @@ class AppFixtures extends Fixture
         UserStory::load();
         BrandStory::load();
         ProductStory::load();
-
         // $manager->flush();
     }
 }
